@@ -47,6 +47,7 @@ int main(void)
 	b.bx = -5; //ball initial x velocity
 	b.by = -5; //ball initial y velocity
 
+
 	
 
 	InitWindow(WIDTH, HEIGHT, "Ping pong"); //Make a window with a resolution of 640x480 and the title "ping pong"
@@ -63,12 +64,10 @@ int main(void)
 		DrawRectangle(cpu.x,cpu.y,cpu.w,cpu.h,BLACK); //Draw a rectangle using variables from the struct "cpu"
 		DrawText( intTochar(ply.score), (WIDTH/2) - 200, 30, 48, WHITE); //write player's score onto screen
 		DrawText(intTochar(cpu.score), (WIDTH/2) + 200, 30, 48, BLACK); //write cpu's score onto screen
-		if(checkCollision(ply.x, b.x, ply.y, b.y, ply.w, b.w, ply.h, b.h))
+		
+		if(checkCollision(ply.x, b.x, ply.y, b.y, ply.w, b.w, ply.h, b.h) || checkCollision(cpu.x, b.x, cpu.y, b.y, cpu.w, b.w, cpu.h, b.h))
 		{
-			 b.bx = -1 * b.bx; //if collision with ball and player is true, multiply -1 by the positive variable b.bx to reverse the ball's velocity
-		}else if(checkCollision(cpu.x, b.x, cpu.y, b.y, cpu.w, b.w, cpu.h, b.h))
-		{
-			 b.bx = -1 * b.bx; //if collision with ball and cpu is true, multiply -1 by the negative variable b.bx to reverse the ball's velocity
+			 b.bx = -1 * b.bx; //if collision with ball and player is true, multiply -1 to reverse the ball's trajectory
 		}
 
 		cpu.y = b.y ; //cpu's y position is always equal to the ball's y position
