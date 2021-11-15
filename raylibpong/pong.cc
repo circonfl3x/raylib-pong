@@ -20,14 +20,15 @@ struct player
 struct ball
 {
 	float x,y,bx,by; //movement variables bx and by are updated as fractional numbers so they are declared as floats in this instance
-	int w = 15;
-	int h = 15;
-};
+	float r = 10.0;
+	//int w = 15; //deprecated
+	//int h = 15; //deprecated
+}; 
 /////////////////////////////////////////////////////////////////////////
 
 //define functions
 const char * intTochar(int a);
-bool checkCollision(int x1,int x2, int y1, int y2, int w1, int w2, int h1, int h2);
+bool checkCollision(int x1,float x2, int y1, float y2, int w1, int h1, float r);
 /////////////////////////////////////////////////////////////////////////////////////
 
 int main(void)
@@ -42,7 +43,7 @@ int main(void)
 	cpu.y = 100; // cpu initial y position
 
 	struct ball b;
-	b.x = (WIDTH/2) - b.w; //ball initial x position
+	b.x = (WIDTH/2) - b.r; //ball initial x position
 	b.y = 120; //ball inital y position
 	b.bx = -5; //ball initial x velocity
 	b.by = -5; //ball initial y velocity
@@ -65,7 +66,7 @@ int main(void)
 		DrawText( intTochar(ply.score), (WIDTH/2) - 200, 30, 48, WHITE); //write player's score onto screen
 		DrawText(intTochar(cpu.score), (WIDTH/2) + 200, 30, 48, BLACK); //write cpu's score onto screen
 		
-		if(checkCollision(ply.x, b.x, ply.y, b.y, ply.w, b.w, ply.h, b.h) || checkCollision(cpu.x, b.x, cpu.y, b.y, cpu.w, b.w, cpu.h, b.h))
+		if(checkCollision(ply.x, b.x, ply.y, b.y, ply.w, ply.h, b.r) || checkCollision(cpu.x, b.x, cpu.y, b.y, cpu.w,cpu.h,b.r))
 		{
 			 b.bx = -1 * b.bx; //if collision with ball and player is true, multiply -1 to reverse the ball's trajectory
 		}
@@ -75,8 +76,9 @@ int main(void)
 		
 
 
-		if (b.x < (WIDTH/2) ) DrawRectangle(b.x,b.y,b.w,b.h,WHITE); //draw a rectangle using variables from struct "b"
-		else DrawRectangle(b.x,b.y,b.w,b.h,BLACK);
+		if (b.x < (WIDTH/2) ) DrawCircle(b.x,b.y,b.r, WHITE); //draw a rectangle using variables from struct "b"
+		
+		else DrawCircle(b.x,b.y,b.r, BLACK);
 		EndDrawing();
 
 		//updateBall(ply, b);
@@ -90,7 +92,7 @@ int main(void)
 			//this code is ran if the CPU scores the player
 
 			cpu.score ++; //increment CPU's score
-			b.x = (WIDTH/2) - b.w; //restore ball's x position
+			b.x = (WIDTH/2) - b.r; //restore ball's x position
 			b.y = 120; //restore ball's y position
 			b.bx = -5; //change ball's directiom to go towards the player
 			
@@ -99,7 +101,7 @@ int main(void)
 			//this code is ran if the player scores the CPU
 
 			ply.score ++; //increment player's score
-			b.x = (WIDTH/2) - b.w; //restore ball's x position
+			b.x = (WIDTH/2) - b.r; //restore ball's x position
 			b.y = 120; //restore ball's y position
 			b.bx = 5; //change ball's directiom to go towards the CPU
 		}
@@ -145,10 +147,10 @@ const char* intTochar(int a)
 	return str.c_str();
 }
 
-bool checkCollision(int x1,int x2, int y1, int y2, int w1, int w2, int h1, int h2)
+bool checkCollision(int x1,float x2, int y1, float y2, int w1, int h1, float r)
 {
 	//this function checks for collision between 2 objects given their x,y,width and height
-	if (x1 <= x2 + w2 && y1 <= y2 + h2 &&
+	if (x1 <= x2 + r && y1 <= y2 + r &&
 		x2 <= x1 + w1 && y2 <= y1 + h1)
 		{
 			return true; //if x1 is less than or equal to x2 + width2 and y1 is less than or equal to y2 + height2 and so on... the boolean returns true
